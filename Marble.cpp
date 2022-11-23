@@ -1,8 +1,13 @@
 #include "Marble.h"
 
+Marble::Marble() {
+	
+}
 Marble::Marble(float r, int sl, int st) : radius(r),slice(sl),stack(st) {
 	
 }
+
+
 void Marble::setRadius(float r){
 	radius = r;
 }
@@ -51,22 +56,6 @@ void Marble::setMTL(const Material& m) {
 	mtl = m;
 }
 void Marble::move() {
-	if (center[0] + radius > WINDOW_WIDTH / 2.0f) {
-		if(velocity[0]>0)
-			velocity[0] = -velocity[0];
-	}
-	if (center[0] - radius < -WINDOW_WIDTH / 2.0f) {
-		if (velocity[0] < 0)
-			velocity[0] = -velocity[0];
-	}
-	if (center[1] + radius > WINDOW_HEIGHT / 2.0f) {
-		if (velocity[1] > 0)
-			velocity[1] = -velocity[1];
-	}
-	if (center[1] - radius < -WINDOW_HEIGHT/ 2.0f) {
-		if (velocity[1] < 0)
-			velocity[1] = -velocity[1];
-	}
 
 	center[0] += velocity[0];
 	center[1] += velocity[1];
