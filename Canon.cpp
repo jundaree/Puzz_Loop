@@ -100,10 +100,10 @@ void Canon::draw() {
 	glTexCoord2f(1.0f, 1.0f); glVertex3f(100.f, 100.f,-50.0f);
 	glTexCoord2f(1.0f, 0.0f); glVertex3f(100.f, -100.f, -50.0f);*/
 
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-100.f, 100.f, -50.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(100.f, 100.f, -50.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(100.f, -100.f, -50.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-100.f, -100.f, -50.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-80.f, 75.f, -50.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(80.f, 75.f, -50.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(80.f, -85.f, -50.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-80.f, -85.f, -50.0f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 	

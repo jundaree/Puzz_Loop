@@ -1,59 +1,47 @@
-/*
-패치노트
-
-
-*/
-
-/*
-
-
-*/
-
+#include <iostream>
 #include <vector>
 #include <time.h>
+#include <GL/glut.h>
+#include "Constants.h"
 #include "Light.h"
 #include "Marble.h"
-#include "Canon.h"
+#include "MarbleInRow.h"
 #include "MarbleFly.h"
+#include "Canon.h"
+
 
 using namespace std;
 
+MarbleInRow MR;
+vector<Material> marble_mat;
 
-vector<Marble> spheres;
+Canon canon(0.f, 0.f, 0.f, 25.0f);
+MarbleFly marbleFly;
+
 Light light(boundaryX, boundaryY, boundaryX / 2, 0);
 clock_t start_clock = clock();
 clock_t end_clock;
 clock_t key_start_clock = clock();  //keyboardDown 함수에서 사용
 clock_t key_end_clock;
 
-vector<Material> marble_mat;
-
-Canon canon(0.f,0.f,0.f,30.0f);
-MarbleFly marbleFly;
-
-
 void initialize() {
-
 	// game marble color assignment
 	marble_mat.push_back(Material(1.0f, 0.0f, 0.0f));
 	marble_mat.push_back(Material(0.0f, 1.0f, 0.0f));
 	marble_mat.push_back(Material(0.0f, 0.0f, 1.0f));
-	
+
 	//Canon
 	canon.initialize(marble_mat);
 
-
-	//Light
-	light.setAmbient(1.0f, 1.0f, 1.0f, 1.0f);
-	light.setDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
+	light.setAmbient(0.5f, 0.5f, 0.5f, 1.0f);
+	light.setDiffuse(0.7f, 0.7f, 0.7f, 1.0f);
 	light.setSpecular(1.0f, 1.0f, 1.0f, 1.0f);
+
+	MR.setMTLlist(marble_mat);
+	MR.createLoopMarble();
 }
 
-
-	
-
 void display() {
-
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -63,27 +51,27 @@ void display() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
-	//--------draw start-----------
+
+	//----draw-----
 
 	light.draw();
 	canon.draw();
 	marbleFly.draw();
-
-	//--------draw end-----------
+	
+	//--------
+	MR.draw();
 
 	glDisable(GL_LIGHT0);
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
 
 	glutSwapBuffers();
-
+	
 }
-
 
 void MarbleFlyControl() {
 	switch (marbleFly.getMode()) {
@@ -110,9 +98,9 @@ void idle() {
 
 	end_clock = clock();
 	if (end_clock - start_clock > fps) {
-
 		//-----idle start--------
-		
+
+		MR.moveAll();
 		marbleFly.move();
 
 		if (canon.idle()) {  //return true if the marble needs to be transfered
@@ -121,12 +109,15 @@ void idle() {
 
 		MarbleFlyControl();
 
+
 		//-------idle end-------------
-		start_clock = end_clock; 
+		
+		start_clock = end_clock;
 	}
 
 	glutPostRedisplay();
 }
+
 
 void keyboardDown(unsigned char key, int x, int y) {
 	key_end_clock = clock();
@@ -138,8 +129,8 @@ void keyboardDown(unsigned char key, int x, int y) {
 		//------- end-------------
 		key_start_clock = end_clock;
 	}
-	
-	
+
+
 }
 
 void keyboardUp(unsigned char key, int x, int y) {

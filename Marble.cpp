@@ -1,13 +1,8 @@
 #include "Marble.h"
-
-Marble::Marble() {
-	
-}
+Marble::Marble(){}
 Marble::Marble(float r, int sl, int st) : radius(r),slice(sl),stack(st) {
 	
 }
-
-
 void Marble::setRadius(float r){
 	radius = r;
 }
@@ -56,7 +51,7 @@ void Marble::setMTL(const Material& m) {
 	mtl = m;
 }
 void Marble::move() {
-
+	
 	center[0] += velocity[0];
 	center[1] += velocity[1];
 	center[2] += velocity[2];
@@ -64,8 +59,7 @@ void Marble::move() {
 }
 void Marble::draw() const {
 	glPushMatrix();
-	
-	
+
 	glTranslatef(center[0], center[1], center[2]);
 	
 	glShadeModel(GL_SMOOTH);

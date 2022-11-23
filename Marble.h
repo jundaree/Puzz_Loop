@@ -3,13 +3,15 @@
 #include<GL/glut.h>
 #include "Material.h"
 
+#ifndef WINDOW_WIDTH
 
+#define WINDOW_WIDTH 640		// window's width
+#define WINDOW_HEIGHT 640		// window's height
+
+#endif
 
 class Marble{
 public:
-	
-	// °øÅë
-	
 	Marble();
 	Marble(float r, int sl, int st);
 	void setRadius(float r);
@@ -34,12 +36,11 @@ public:
 	float radius;
 	int slice;
 	int stack;
+	int loopPointIdx;
 	float center[3];
 	float velocity[3];
+
 	Material mtl;
-
-	int idx;
-
-
 };
+
 
