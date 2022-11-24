@@ -1,5 +1,10 @@
 #include "MarbleInRow.h"
 
+vector<float> MarbleInRow::getCenterByIdx(int idx) {
+	vector<float> temp{ RowList[idx].getCenterX(),RowList[idx].getCenterY(),RowList[idx].getCenterZ() };
+	return temp;
+}
+
 MarbleInRow::MarbleInRow() : stageNum(1), startNum(20), radius(25), linewidth(10) {
 	//RowList.resize(20);
 	cout << "constructor 1 called" << endl;

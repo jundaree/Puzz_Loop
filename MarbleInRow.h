@@ -27,6 +27,9 @@ public:
 
 	void draw() const;
 
+	vector<float> getCenterByIdx(int idx); 
+
+
 	// Variables =====================================================
 	vector <Marble> RowList;
 	vector <Material> MTLlist;

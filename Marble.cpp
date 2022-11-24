@@ -37,6 +37,10 @@ float Marble::getCenterZ() const {
 	return center[2];
 }
 
+vector<float> Marble::getCenter() const {
+	return vector<float>{center[0], center[1], center[2]};
+}
+
 float Marble::getVelocityX() const {
 	return velocity[0];
 }
@@ -45,6 +49,10 @@ float Marble::getVelocityY() const{
 }
 float Marble::getVelocityZ() const {
 	return velocity[2];
+}
+
+vector<float> Marble::getVelocity() const {
+	return vector<float>{velocity[0], velocity[1], velocity[2]};
 }
 
 void Marble::setMTL(const Material& m) {

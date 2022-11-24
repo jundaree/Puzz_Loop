@@ -1,3 +1,18 @@
+/*
+수정사항
+
+1. Marble.h에 getCenter(), getVelocity() 함수 추가 (vector<float>반환)
+2. MarbleInRow getCenterIdx() 함수 필요없음
+3. Constants.h에 GetDistance() 추가
+
+논의사항
+1. Loop의 끝부분 경로 연장
+2. REPOS Frame과 mode, canon SHOOTED 삭제?
+3. Constants.h에 라이브러리 모아놓기
+
+*/
+
+
 #include <iostream>
 #include <vector>
 #include <time.h>
@@ -73,22 +88,75 @@ void display() {
 	
 }
 
+
+
+bool CollisionDetection() {
+	/* Implement: collision detection */
+
+	for (int i = 0;i < MR.RowList.size();i++) {
+		vector<float> row_marble_center = MR.RowList[i].getCenter();
+		float distance = getDistance(MR.RowList[i].getCenter(), marbleFly.marble.getCenter());
+		if (distance <= 2 * marbleFly.marble.getRadius()) {
+			
+			if (i == 0) {
+				int loopidx = MR.RowList[i].loopPointIdx;
+				vector<float> imaginary_center = MR.loopPoints[loopidx - 2 * MR.RowList[i].getRadius()];
+				float distance_front = getDistance(MR.RowList[i + 1].getCenter(), marbleFly.marble.getCenter());
+				float distance_back = getDistance(imaginary_center, marbleFly.marble.getCenter());
+				if (distance_front < distance_back)
+					marbleFly.Reposition(MR.RowList[i+1].getCenter(), MR.RowList[i].getCenter());
+				else
+					marbleFly.Reposition(MR.RowList[i].getCenter(), imaginary_center);
+			}
+			else if (i == MR.RowList.size() - 1) {
+				int loopidx = MR.RowList[i].loopPointIdx;
+				vector<float> imaginary_center=MR.loopPoints[loopidx + 2 * MR.RowList[i].getRadius()];
+				float distance_front = getDistance(imaginary_center, marbleFly.marble.getCenter());
+				float distance_back = getDistance(MR.RowList[i - 1].getCenter(), marbleFly.marble.getCenter());
+				if (distance_front < distance_back)
+					marbleFly.Reposition(imaginary_center, MR.RowList[i].getCenter());
+				else
+					marbleFly.Reposition(MR.RowList[i].getCenter(), MR.RowList[i - 1].getCenter());
+				
+			}
+			else {
+				float distance_front = getDistance(MR.RowList[i + 1].getCenter(), marbleFly.marble.getCenter());
+				float distance_back = getDistance(MR.RowList[i - 1].getCenter(), marbleFly.marble.getCenter());
+				if (distance_front < distance_back)
+					marbleFly.Reposition(MR.RowList[i + 1].getCenter(), MR.RowList[i].getCenter());
+				else
+					marbleFly.Reposition(MR.RowList[i].getCenter(), MR.RowList[i - 1].getCenter());
+			}
+			return true;
+			
+		}
+					
+	}
+	return false;
+		
+}
+
 void MarbleFlyControl() {
 	switch (marbleFly.getMode()) {
 	case MarbleFlyMode::FLY:
 		if (!marbleFly.OutofBound()) {
-			//Collision Detection
+			if (CollisionDetection()) {
+				canon.shoot_mode = canon.READY;
+				marbleFly.setMode(MarbleFlyMode::REPOS);
+			}
 		}
 		else {
 			canon.shoot_mode = canon.READY;
 		}
 		break;
-	case MarbleFlyMode::REPOS:
-		//marbleFly.Reposition(float* front_center, float* back_center);
+	case MarbleFlyMode::REPOS:  // 삭제? // REPOS 작동 확인을 위해 만들었습니다 //실제 게임에서는 필요없는 구문
+		marbleFly.reposition_frame--;
+		if(marbleFly.reposition_frame==0)
+			marbleFly.setMode(MarbleFlyMode::OFF);
 		break;
-	case MarbleFlyMode::INSERT:
-		//marbleFly.Insertion(float* front_center);
-		break;
+	//case MarbleFlyMode::INSERT:
+	//	//marbleFly.Insertion(float* front_center);
+	//	break;
 	default:
 		break;
 	}
@@ -100,8 +168,11 @@ void idle() {
 	if (end_clock - start_clock > fps) {
 		//-----idle start--------
 
-		MR.moveAll();
-		marbleFly.move();
+		if (marbleFly.getMode() != MarbleFlyMode::REPOS) {  // REPOS 작동 확인을 위한 if문
+			MR.moveAll();
+			marbleFly.move();
+		}
+
 
 		if (canon.idle()) {  //return true if the marble needs to be transfered
 			marbleFly.setMarble(canon.shoot());

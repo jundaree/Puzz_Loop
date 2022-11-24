@@ -20,27 +20,35 @@ public :
 
 	bool OutofBound(); // if OutofBound, mode=off
 
-	void Reposition(float* front_center, float* back_center);
-
-	void Insertion(float* front_center);
+	void Reposition(vector<float> front_center, vector<float> back_center);
 	
-	Marble Return(); // velocity 초기화
-	
+	Marble Return(); // velocity 초기화	
 	
 
 	/*
 	
+	collision check
+		for (cosnt marble& mb : marbleinRow.vector)
+			collisiondetected
+
+
+
 	function MarbleFly_idle()
-		getMode
+		marblefly getMode
+		
 		if fly
 			if (!OutofBound())
 				collision check outside 
-					mode=REPOS
+					marblfly.mode=REPOS
+					marbleinRow.
 			else 
 				canon.shoot_mode=READY;
+		
 		if REPOS 
-			repos
-			mode=insertion
+			marblfly.repos
+			marbleinRow.accept(marblfly.Return());
+			marblefly.mode=INSERT
+
 		if INSERT
 			Insertion
 			frame_count++
@@ -53,6 +61,7 @@ public :
 
 	*/
 	
+	
 	MarbleFlyMode getMode();
 	void setMode(MarbleFlyMode _mode);
 
@@ -62,6 +71,7 @@ public :
 
 
 	MarbleFlyMode mode;
+	int reposition_frame;
 	int insertion_frame;   // 10 
 	int frame_count;  //0 -> 10
 	float speed;

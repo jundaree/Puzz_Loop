@@ -1,14 +1,10 @@
 #pragma once
 #include<iostream>
 #include<GL/glut.h>
+#include <vector>
 #include "Material.h"
 
-#ifndef WINDOW_WIDTH
-
-#define WINDOW_WIDTH 640		// window's width
-#define WINDOW_HEIGHT 640		// window's height
-
-#endif
+using namespace std;
 
 class Marble{
 public:
@@ -23,11 +19,13 @@ public:
 	float getCenterX() const;
 	float getCenterY() const;
 	float getCenterZ() const;
+	vector<float> getCenter() const;
 
 	void setVelocity(float x, float y, float z);
 	float getVelocityX() const;
 	float getVelocityY() const;
 	float getVelocityZ() const;
+	vector<float> getVelocity() const;
 	
 	void move();
 	void setMTL(const Material& m);
