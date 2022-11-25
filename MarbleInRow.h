@@ -27,7 +27,6 @@ public:
 
 	void draw() const;
 
-	vector<float> getCenterByIdx(int idx); 
 
 
 	// Variables =====================================================

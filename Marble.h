@@ -28,7 +28,7 @@ public:
 	vector<float> getVelocity() const;
 	
 	void move();
-	void setMTL(const Material& m);
+	void setMTL(const Material& m, int _mtl_idx);
 	void draw() const;
 
 	float radius;
@@ -39,6 +39,9 @@ public:
 	float velocity[3];
 
 	Material mtl;
+
+	int mtl_idx;
+
 };
 
 

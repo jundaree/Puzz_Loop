@@ -8,11 +8,7 @@
 class MarbleFly
 {
 public :
-
-	/*
-	Mode¿¡ Merging Ãß°¡
-	merging frame
-	*/
+	enum class Mode { OFF, FLY } mode;
 
 	MarbleFly();
 	
@@ -61,16 +57,17 @@ public :
 
 	*/
 	
-	
-	MarbleFlyMode getMode();
-	void setMode(MarbleFlyMode _mode);
+
+
+	bool isFlying();
+	void setMode(Mode _mode);
 
 	void move();
 
 	void draw();
 
 
-	MarbleFlyMode mode;
+	
 	int reposition_frame;
 	int insertion_frame;   // 10 
 	int frame_count;  //0 -> 10

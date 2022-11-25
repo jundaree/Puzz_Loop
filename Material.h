@@ -18,6 +18,7 @@ public:
 	const float* getDiffuse() const;
 	const float* getSpecular() const;
 	const float* getShininess() const;
+
 		
 	
 private :

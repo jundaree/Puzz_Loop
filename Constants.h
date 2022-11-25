@@ -16,7 +16,7 @@
 
 #define PI 3.1415926
 const float fps = 1000 / 60.0f;
-enum class MarbleFlyMode {OFF, FLY, REPOS, INSERT};
+
 
 inline float getDistance(std::vector<float> a, std::vector<float> b) {
 	return sqrt((a[0] - b[0]) * (a[0] - b[0]) + (a[1] - b[1]) * (a[1] - b[1]) + (a[2] - b[2]) * (a[2] - b[2]));

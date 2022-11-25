@@ -55,8 +55,9 @@ vector<float> Marble::getVelocity() const {
 	return vector<float>{velocity[0], velocity[1], velocity[2]};
 }
 
-void Marble::setMTL(const Material& m) {
+void Marble::setMTL(const Material& m, int _mtl_idx=0) {
 	mtl = m;
+	mtl_idx = _mtl_idx;
 }
 void Marble::move() {
 	

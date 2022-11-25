@@ -1,7 +1,7 @@
 #include "MarbleFly.h"
 
 
-MarbleFly::MarbleFly() : mode(MarbleFlyMode::OFF), reposition_frame(10),insertion_frame(10), speed(10.0f), frame_count(0) {
+MarbleFly::MarbleFly() : mode(Mode::OFF), reposition_frame(10),insertion_frame(10), speed(10.0f), frame_count(0) {
 
 }
 
@@ -9,7 +9,7 @@ void MarbleFly::setMarble(Marble _marble) {
 	marble = _marble;
 	//speed.x=speed*cos(Angle) = speed * center.x / (2*getRadius())
 	marble.setVelocity(speed * marble.getCenterX() / 2 / marble.getRadius(), speed * marble.getCenterY() / 2 / marble.getRadius(),0.0f);
-	mode = MarbleFlyMode::FLY;
+	mode = Mode::FLY;
 	reposition_frame = 10;
 	insertion_frame = 10;
 }
@@ -20,7 +20,7 @@ bool MarbleFly::OutofBound() {
 	float r = marble.getRadius();
 
 	if ((x > boundaryX + r) || (x < -boundaryX - r) || (y > boundaryY + r) || (y < -boundaryY - r)) {
-		mode = MarbleFlyMode::OFF;
+		mode = Mode::OFF;
 		return true;
 	}
 	return false;
@@ -62,26 +62,28 @@ void MarbleFly::Reposition(vector<float> front_center, vector<float> back_center
 
 
 Marble MarbleFly::Return() {
-	setMode( MarbleFlyMode::OFF);
+	this->setMode(Mode::OFF);
 	marble.setVelocity(0.0f, 0.0f, 0.0f);
 	return marble;
 }
 
-MarbleFlyMode MarbleFly::getMode() {
-	return mode;
+bool MarbleFly::isFlying() {
+	if (mode == Mode::FLY)
+		return true;
+	return false;
 }
 
-void MarbleFly::setMode(MarbleFlyMode _mode) {
+void MarbleFly::setMode(Mode _mode) {
 	mode = _mode;
 }
 
 void MarbleFly::move() {
-	if(mode==MarbleFlyMode::FLY)
+	if(mode==Mode::FLY)
 		marble.move();
 }
 
 void MarbleFly::draw() {
-	if (mode!=MarbleFlyMode::OFF)
+	if (mode==Mode::FLY)
 		marble.draw();
 }
 

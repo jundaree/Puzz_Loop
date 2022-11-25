@@ -62,7 +62,8 @@ void Canon::initialize(vector<Material> _marblesMtl) {
 	for (int i = 0;i < 2;i++) {
 		Marble temp(marble_radius, 20, 20);
 		temp.setCenter(0.0f, 0.0f, 0.0f);
-		temp.setMTL(marblesMtl[rand() % marblesMtl.size()]);
+		int mtl_idx = rand() % marblesMtl.size();
+		temp.setMTL(marblesMtl[mtl_idx], mtl_idx);
 		marbles.push(temp);
 	}
 }
@@ -127,8 +128,11 @@ Marble Canon::shoot() {
 	marbles.pop();
 	
 	Marble new_marble(marble_radius, 20, 20);
-	new_marble.setMTL(marblesMtl[rand() % marblesMtl.size()]);
+	int mtl_idx = rand() % marblesMtl.size();
+	new_marble.setMTL(marblesMtl[mtl_idx],mtl_idx);
+	;
 	new_marble.setCenter(0.0f, 0.0f, 0.0f);
+	
 	marbles.push(new_marble);
 
 	

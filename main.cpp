@@ -90,7 +90,7 @@ void display() {
 
 
 
-bool CollisionDetection() {
+bool CollisionDetectionWithHandling() {
 	/* Implement: collision detection */
 
 	for (int i = 0;i < MR.RowList.size();i++) {
@@ -137,28 +137,17 @@ bool CollisionDetection() {
 }
 
 void MarbleFlyControl() {
-	switch (marbleFly.getMode()) {
-	case MarbleFlyMode::FLY:
+	if(marbleFly.isFlying()){
 		if (!marbleFly.OutofBound()) {
-			if (CollisionDetection()) {
+			if (CollisionDetectionWithHandling()) {
 				canon.shoot_mode = canon.READY;
-				marbleFly.setMode(MarbleFlyMode::REPOS);
+				marbleFly.setMode(MarbleFly::Mode::OFF);
+				//MR.receiveMarble(marbleFly.Return());
 			}
 		}
 		else {
 			canon.shoot_mode = canon.READY;
 		}
-		break;
-	case MarbleFlyMode::REPOS:  // 삭제? // REPOS 작동 확인을 위해 만들었습니다 //실제 게임에서는 필요없는 구문
-		marbleFly.reposition_frame--;
-		if(marbleFly.reposition_frame==0)
-			marbleFly.setMode(MarbleFlyMode::OFF);
-		break;
-	//case MarbleFlyMode::INSERT:
-	//	//marbleFly.Insertion(float* front_center);
-	//	break;
-	default:
-		break;
 	}
 }
 
@@ -168,11 +157,9 @@ void idle() {
 	if (end_clock - start_clock > fps) {
 		//-----idle start--------
 
-		if (marbleFly.getMode() != MarbleFlyMode::REPOS) {  // REPOS 작동 확인을 위한 if문
-			MR.moveAll();
-			marbleFly.move();
-		}
 
+		MR.moveAll();
+		marbleFly.move();
 
 		if (canon.idle()) {  //return true if the marble needs to be transfered
 			marbleFly.setMarble(canon.shoot());

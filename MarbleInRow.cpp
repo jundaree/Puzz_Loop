@@ -1,9 +1,5 @@
 #include "MarbleInRow.h"
 
-vector<float> MarbleInRow::getCenterByIdx(int idx) {
-	vector<float> temp{ RowList[idx].getCenterX(),RowList[idx].getCenterY(),RowList[idx].getCenterZ() };
-	return temp;
-}
 
 MarbleInRow::MarbleInRow() : stageNum(1), startNum(20), radius(25), linewidth(10) {
 	//RowList.resize(20);
@@ -67,7 +63,7 @@ void MarbleInRow::createLoopMarble() {
 	for (int i = 0; i < startNum; i++) {
 		int j = rand()%3;
 		Marble M;
-		M.setMTL(MTLlist[j]);
+		M.setMTL(MTLlist[j],j);
 		M.setRadius(radius);
 		M.setSlice(20);
 		M.setStack(20);
