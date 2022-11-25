@@ -93,11 +93,11 @@ void display() {
 bool CollisionDetectionWithHandling() {
 	/* Implement: collision detection */
 
-	for (int i = 0;i < MR.RowList.size();i++) {
+	for (int i = 0; i < MR.RowList.size(); i++) {
 		vector<float> row_marble_center = MR.RowList[i].getCenter();
 		float distance = getDistance(MR.RowList[i].getCenter(), marbleFly.marble.getCenter());
 		if (distance <= 2 * marbleFly.marble.getRadius()) {
-			
+
 			if (i == 0) {
 				int loopidx = MR.RowList[i].loopPointIdx;
 				vector<float> imaginary_center = MR.loopPoints[loopidx - 2 * MR.RowList[i].getRadius()];
@@ -105,52 +105,52 @@ bool CollisionDetectionWithHandling() {
 				float distance_back = getDistance(imaginary_center, marbleFly.marble.getCenter());
 				if (distance_front < distance_back) {
 					marbleFly.Reposition(MR.RowList[i + 1].getCenter(), MR.RowList[i].getCenter());
-					//MR.receiveMarble(marbleFly.Return(),i,i+1);
+					MR.receiveMarble(marbleFly.Return(),i,i+1);
 				}
 				else {
 					marbleFly.Reposition(MR.RowList[i].getCenter(), imaginary_center);
-					//MR.receiveMarble(marbleFly.Return(),i-1,i);
+					MR.receiveMarble(marbleFly.Return(),i-1,i);
 				}
 			}
 			else if (i == MR.RowList.size() - 1) {
 				int loopidx = MR.RowList[i].loopPointIdx;
-				vector<float> imaginary_center=MR.loopPoints[loopidx + 2 * MR.RowList[i].getRadius()];
+				vector<float> imaginary_center = MR.loopPoints[loopidx + 2 * MR.RowList[i].getRadius()];
 				float distance_front = getDistance(imaginary_center, marbleFly.marble.getCenter());
 				float distance_back = getDistance(MR.RowList[i - 1].getCenter(), marbleFly.marble.getCenter());
 				if (distance_front < distance_back) {
 					marbleFly.Reposition(imaginary_center, MR.RowList[i].getCenter());
-					//MR.receiveMarble(marbleFly.Return(),i,i+1);
+					MR.receiveMarble(marbleFly.Return(),i,i+1);
 				}
 				else {
 					marbleFly.Reposition(MR.RowList[i].getCenter(), MR.RowList[i - 1].getCenter());
-					//MR.receiveMarble(marbleFly.Return(),i-1,i);
+					MR.receiveMarble(marbleFly.Return(),i-1,i);
 
 				}
-				
-				
+
+
 			}
 			else {
 				float distance_front = getDistance(MR.RowList[i + 1].getCenter(), marbleFly.marble.getCenter());
 				float distance_back = getDistance(MR.RowList[i - 1].getCenter(), marbleFly.marble.getCenter());
 				if (distance_front < distance_back) {
 					marbleFly.Reposition(MR.RowList[i + 1].getCenter(), MR.RowList[i].getCenter());
-					//MR.receiveMarble(marbleFly.Return(),i,i+1);
+					MR.receiveMarble(marbleFly.Return(),i,i+1);
 				}
 				else {
 					marbleFly.Reposition(MR.RowList[i].getCenter(), MR.RowList[i - 1].getCenter());
-					//MR.receiveMarble(marbleFly.Return(),i-1,i);
+					MR.receiveMarble(marbleFly.Return(),i-1,i);
 				}
-				
+
 			}
 
-			
+
 			return true;
-			
+
 		}
-					
+
 	}
 	return false;
-		
+
 }
 
 void MarbleFlyControl() {
@@ -173,8 +173,12 @@ void idle() {
 	if (end_clock - start_clock > fps) {
 		//-----idle start--------
 
+		if (MR.Mode == MarbleInRow::InRowMode::OFF)
+			MR.moveAll();
+		else if (MR.Mode == MarbleInRow::InRowMode::INSERT)
+			MR.InsertMarble();
 
-		MR.moveAll();
+
 		marbleFly.move();
 
 		if (canon.idle()) {  //return true if the marble needs to be transfered
