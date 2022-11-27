@@ -33,12 +33,12 @@ vector<float> MarbleInRow::savedLoopInfo(float length) {
 		else if (length < hidedLength + 1300) {
 			coord[0] = -boundaryX + 800; coord[1] = 250 - (length - hidedLength - 800);  coord[2] = 0;
 		}
-		else if (length < hidedLength + 2100) {
+		else {
 			coord[0] = (-boundaryX + 800) - (length - hidedLength - 1300); coord[1] = -250;  coord[2] = 0;
 		}
-		else {
-			cout << "Marble center arrived at the last of the loop! Game should be end" << endl;
-		}
+		//else if (length < hidedLength + 2100) {
+		//	coord[0] = (-boundaryX + 800) - (length - hidedLength - 1300); coord[1] = -250;  coord[2] = 0;
+		//}
 		break;
 	case 2:
 		// for stage 2 
@@ -53,6 +53,13 @@ void MarbleInRow::createLoopMarble() {
 	// create loop points
 	for (int i = 0; i < totalLength; i++)
 		loopPoints.push_back(savedLoopInfo(i));
+	
+	cout << "loopPoints front point (x,y,z) = " << loopPoints.front()[0] << ", "
+												<< loopPoints.front()[1] << ", "
+												<< loopPoints.front()[2] << endl;
+	cout << "loopPoints last point (x,y,z) = " << loopPoints.back()[0] << ", "
+												<< loopPoints.back()[1] << ", " 
+												<< loopPoints.back()[2] << endl;
 
 	// set Marble radius, slice/stack, and initial center
 	srand(unsigned int(time(0))); 
@@ -103,13 +110,15 @@ void MarbleInRow::moveAll() {
 }
 
 void MarbleInRow::receiveMarble(Marble M, int idx_s, int idx_b) {
+	cout << "receiveMarble() called! | idx_s, idx_b = " << idx_s << ", " << idx_b << endl;
 	collisionMarble = M;
 	collisionIdx[0] = idx_s; collisionIdx[1] = idx_b;
-	Mode = InRowMode::INSERT; // animation 어색하면 주석 가능 부분
+	Mode = InRowMode::COLLISION;
+	cout << "Mode changed to COLLISION" << endl;
 }
-//enum class InRowMode { OFF, INSERT, ERASE, PULL };
 
 void MarbleInRow::isEraseOrInsert() {
+	cout << "isEraseOrInsert() called! | " ;
 	int cnt1 = 0, cnt2 = 0;
 	for (int i = collisionIdx[1]; i < RowList.size(); i++) {
 		if (collisionMarble.mtl_idx == RowList[i].mtl_idx) {
@@ -125,28 +134,34 @@ void MarbleInRow::isEraseOrInsert() {
 	}
 	if (cnt1 + cnt2 >= 2) {
 		Mode = InRowMode::ERASE;
+		cout << "Mode changed to ERASE" << endl;
 		sameColorIdx[0] = collisionIdx[0] - cnt1 + 1;
 		sameColorIdx[1] = collisionIdx[1] + cnt1 - 1;
+		cout << "sameColor index : " << sameColorIdx[0] << " ~ " << sameColorIdx[1] << endl;
 	}
 	else { 
 		Mode = InRowMode::INSERT;
+		cout << "Mode changed to INSERT" << endl;
 		posInsert.push_back( collisionMarble.getCenter() );
-		if (collisionIdx[0] < 0) {
-			posInsert.push_back(loopPoints[RowList[collisionIdx[1]].loopPointIdx]);
+		if (collisionIdx[1] > RowList.size() - 1) {
+			posInsert.push_back(loopPoints[ RowList[collisionIdx[0]].loopPointIdx + 2 * radius ]);
 		}
-		else if (collisionIdx[1] > RowList.size() - 1) {
-			posInsert.push_back(loopPoints[RowList[collisionIdx[0]].loopPointIdx + 2 * radius]);
-		}
+		else posInsert.push_back(loopPoints[RowList[collisionIdx[1]].loopPointIdx]);
+
 		sameColorIdx[0] = collisionIdx[0];
 		sameColorIdx[1] = collisionIdx[1];
 	}
 }
 
 void MarbleInRow::InsertMarble() {
-	if (insertframe <= (2 * radius / idx_speed[0])) {
-		collisionMarble.setCenter(posInsert[0][0] + (posInsert[1][0] - posInsert[0][0]) * insertframe / 20,
-						  		  posInsert[0][1] + (posInsert[1][1] - posInsert[0][1]) * insertframe / 20,
-								  posInsert[0][2] + (posInsert[1][2] - posInsert[0][2]) * insertframe / 20 );
+	int frameBound = 2 * radius / idx_speed[0];
+	if(insertframe == 0 ) cout << "InsertMarble() called!" << endl;
+
+	if (insertframe < frameBound) {
+		collisionMarble.setCenter(posInsert[0][0] + (posInsert[1][0] - posInsert[0][0]) * insertframe / frameBound,
+						  		  posInsert[0][1] + (posInsert[1][1] - posInsert[0][1]) * insertframe / frameBound,
+								  posInsert[0][2] + (posInsert[1][2] - posInsert[0][2]) * insertframe / frameBound);
+
 		for (int i = collisionIdx[1]; i < RowList.size(); i++) {
 			RowList[i].loopPointIdx += idx_speed[0];
 			RowList[i].setCenter(loopPoints[RowList[i].loopPointIdx][0],
@@ -157,14 +172,19 @@ void MarbleInRow::InsertMarble() {
 	}
 	else {
 		Mode = InRowMode::OFF;
-		if(collisionIdx[1] > RowList.size() - 1)
+		cout << "Mode changed to OFF" << endl;
+		/*if(collisionIdx[1] > RowList.size() - 1)
 			collisionMarble.loopPointIdx = RowList[collisionIdx[0]].loopPointIdx + 2 * radius;
 		else
-			collisionMarble.loopPointIdx = RowList[collisionIdx[1]].loopPointIdx;
+			collisionMarble.loopPointIdx = RowList[collisionIdx[1]].loopPointIdx;*/
+		Marble M = collisionMarble;
+		RowList.insert(RowList.begin() + collisionIdx[1], M);
+		cout << "inserted marble's mtl idx :" << RowList[collisionIdx[1]].mtl_idx << endl;
 
-		RowList.insert(RowList.begin() + collisionIdx[1], collisionMarble);
 		insertframe = 0;
-		posInsert.clear();
+		posInsert.pop_back();
+		posInsert.pop_back();
+		cout << "insertframe : " << insertframe << "	|	RowList.size() : " << RowList.size() << endl;
 	}
 }
 

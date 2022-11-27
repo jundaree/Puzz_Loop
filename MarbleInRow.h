@@ -42,7 +42,7 @@ public:
 	int idx_speed[3] = { 2,1,5 };	// [0] : Initial speed to bring marble from hided area / [1] : Normal Speed / [2] : Pulling speed 
 	vector<vector<float>> loopPoints;
 
-	enum class InRowMode { OFF, INSERT, ERASE, PULL};
+	enum class InRowMode { OFF, COLLISION, INSERT, ERASE, PULL};
 	InRowMode Mode;
 	Marble collisionMarble;
 	int collisionIdx[2];

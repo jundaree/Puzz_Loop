@@ -1,18 +1,3 @@
-/*
-수정사항
-
-1. Marble.h에 getCenter(), getVelocity() 함수 추가 (vector<float>반환)
-2. MarbleInRow getCenterIdx() 함수 필요없음
-3. Constants.h에 GetDistance() 추가
-
-논의사항
-1. Loop의 끝부분 경로 연장
-2. REPOS Frame과 mode, canon SHOOTED 삭제?
-3. Constants.h에 라이브러리 모아놓기
-
-*/
-
-
 #include <iostream>
 #include <vector>
 #include <time.h>
@@ -45,13 +30,15 @@ void initialize() {
 	marble_mat.push_back(Material(0.0f, 1.0f, 0.0f));
 	marble_mat.push_back(Material(0.0f, 0.0f, 1.0f));
 
-	//Canon
-	canon.initialize(marble_mat);
-
+	// Light
 	light.setAmbient(0.5f, 0.5f, 0.5f, 1.0f);
 	light.setDiffuse(0.7f, 0.7f, 0.7f, 1.0f);
 	light.setSpecular(1.0f, 1.0f, 1.0f, 1.0f);
 
+	//Canon
+	canon.initialize(marble_mat);
+	
+	// Loop
 	MR.setMTLlist(marble_mat);
 	MR.createLoopMarble();
 }
@@ -70,15 +57,12 @@ void display() {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
-
 	//----draw-----
-
 	light.draw();
 	canon.draw();
 	marbleFly.draw();
-	
-	//--------
 	MR.draw();
+	//----draw-----
 
 	glDisable(GL_LIGHT0);
 	glDisable(GL_LIGHTING);
@@ -88,10 +72,7 @@ void display() {
 	
 }
 
-
-
 bool CollisionDetectionWithHandling() {
-	/* Implement: collision detection */
 
 	for (int i = 0; i < MR.RowList.size(); i++) {
 		vector<float> row_marble_center = MR.RowList[i].getCenter();
@@ -124,10 +105,7 @@ bool CollisionDetectionWithHandling() {
 				else {
 					marbleFly.Reposition(MR.RowList[i].getCenter(), MR.RowList[i - 1].getCenter());
 					MR.receiveMarble(marbleFly.Return(),i-1,i);
-
 				}
-
-
 			}
 			else {
 				float distance_front = getDistance(MR.RowList[i + 1].getCenter(), marbleFly.marble.getCenter());
@@ -140,14 +118,9 @@ bool CollisionDetectionWithHandling() {
 					marbleFly.Reposition(MR.RowList[i].getCenter(), MR.RowList[i - 1].getCenter());
 					MR.receiveMarble(marbleFly.Return(),i-1,i);
 				}
-
 			}
-
-
 			return true;
-
 		}
-
 	}
 	return false;
 
@@ -171,12 +144,16 @@ void idle() {
 
 	end_clock = clock();
 	if (end_clock - start_clock > fps) {
-		//-----idle start--------
 
+		//-----idle start--------
 		if (MR.Mode == MarbleInRow::InRowMode::OFF)
 			MR.moveAll();
-		else if (MR.Mode == MarbleInRow::InRowMode::INSERT)
+		else if (MR.Mode == MarbleInRow::InRowMode::COLLISION) {
+			MR.isEraseOrInsert();
+		}
+		else if (MR.Mode == MarbleInRow::InRowMode::INSERT) {
 			MR.InsertMarble();
+		}
 
 
 		marbleFly.move();
@@ -187,9 +164,7 @@ void idle() {
 
 		MarbleFlyControl();
 
-
-		//-------idle end-------------
-		
+		//-------idle end-------------		
 		start_clock = end_clock;
 	}
 
