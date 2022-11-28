@@ -173,18 +173,23 @@ void MarbleInRow::InsertMarble() {
 	else {
 		Mode = InRowMode::OFF;
 		cout << "Mode changed to OFF" << endl;
-		/*if(collisionIdx[1] > RowList.size() - 1)
+
+		if (collisionIdx[1] > RowList.size() - 1) {
 			collisionMarble.loopPointIdx = RowList[collisionIdx[0]].loopPointIdx + 2 * radius;
-		else
-			collisionMarble.loopPointIdx = RowList[collisionIdx[1]].loopPointIdx;*/
-		Marble M = collisionMarble;
-		RowList.insert(RowList.begin() + collisionIdx[1], M);
+			cout << "1" << endl;
+		}
+		else {
+			cout << "2" << endl;
+			collisionMarble.loopPointIdx = RowList[collisionIdx[1]].loopPointIdx - 2 * radius;
+		}
+		RowList.insert(RowList.begin() + collisionIdx[1], collisionMarble);
 		cout << "inserted marble's mtl idx :" << RowList[collisionIdx[1]].mtl_idx << endl;
 
 		insertframe = 0;
 		posInsert.pop_back();
 		posInsert.pop_back();
-		cout << "insertframe : " << insertframe << "	|	RowList.size() : " << RowList.size() << endl;
+		cout << "Updated RowList.size() : " << RowList.size() << endl;
+
 	}
 }
 
