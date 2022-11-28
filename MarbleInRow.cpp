@@ -135,8 +135,8 @@ void MarbleInRow::isEraseOrInsert() {
 	if (cnt1 + cnt2 >= 2) {
 		Mode = InRowMode::ERASE;
 		cout << "Mode changed to ERASE" << endl;
-		sameColorIdx[0] = collisionIdx[0] - cnt1 + 1;
-		sameColorIdx[1] = collisionIdx[1] + cnt1 - 1;
+		sameColorIdx[0] = collisionIdx[0] - (cnt2 - 1);
+		sameColorIdx[1] = collisionIdx[1] + (cnt1 - 1) ;
 		cout << "sameColor index : " << sameColorIdx[0] << " ~ " << sameColorIdx[1] << endl;
 	}
 	else { 
@@ -147,9 +147,7 @@ void MarbleInRow::isEraseOrInsert() {
 			posInsert.push_back(loopPoints[ RowList[collisionIdx[0]].loopPointIdx + 2 * radius ]);
 		}
 		else posInsert.push_back(loopPoints[RowList[collisionIdx[1]].loopPointIdx]);
-
-		sameColorIdx[0] = collisionIdx[0];
-		sameColorIdx[1] = collisionIdx[1];
+		cout << "Collision index : " << collisionIdx[0] << " ~ " << collisionIdx[1] << endl;
 	}
 }
 
@@ -183,7 +181,6 @@ void MarbleInRow::InsertMarble() {
 			collisionMarble.loopPointIdx = RowList[collisionIdx[1]].loopPointIdx - 2 * radius;
 		}
 		RowList.insert(RowList.begin() + collisionIdx[1], collisionMarble);
-		cout << "inserted marble's mtl idx :" << RowList[collisionIdx[1]].mtl_idx << endl;
 
 		insertframe = 0;
 		posInsert.pop_back();

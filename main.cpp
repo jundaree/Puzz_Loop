@@ -13,6 +13,7 @@
 using namespace std;
 
 MarbleInRow MR;
+
 vector<Material> marble_mat;
 
 Canon canon(0.f, 0.f, 0.f, 25.0f);
@@ -146,6 +147,7 @@ void idle() {
 	if (end_clock - start_clock > fps) {
 
 		//-----idle start--------
+	
 		if (MR.Mode == MarbleInRow::InRowMode::OFF)
 			MR.moveAll();
 		else if (MR.Mode == MarbleInRow::InRowMode::COLLISION) {
@@ -153,6 +155,9 @@ void idle() {
 		}
 		else if (MR.Mode == MarbleInRow::InRowMode::INSERT) {
 			MR.InsertMarble();
+		}
+		else if (MR.Mode == MarbleInRow::InRowMode::ERASE) {
+			//MR.InsertMarble();
 		}
 
 
