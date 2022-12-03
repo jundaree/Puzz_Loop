@@ -21,7 +21,7 @@ public:
 
 	// Functions for Marble
 	void setMTLlist(vector<Material> marble_mat);
-	
+	void movePreProgress();
 	void moveAll();
 	
 	void receiveMarble(Marble M, int idx_s, int idx_b);
@@ -30,11 +30,13 @@ public:
 
 	void InsertMarble();
 
-	void EraseMarble();
-	void moveByIndex(int start, int end);
+	void EraseCollisionMarble();
+	void checkPullErase();
+	void Pull_Erase();
 
 	void draw() const;
 
+	void move();	// Asemmble
 
 	// Variables =====================================================
 	vector <Marble> RowList;
@@ -42,18 +44,22 @@ public:
 	int idx_speed[3] = { 2,1,5 };	// [0] : Initial speed to bring marble from hided area / [1] : Normal Speed / [2] : Pulling speed 
 	vector<vector<float>> loopPoints;
 
-	enum class InRowMode { OFF, COLLISION, INSERT, ERASE, PULL};
+	enum class InRowMode { GAME_OVER, PRE_PROGRESS, OFF, COLLISION, INSERT, ERASE, PULL, PULLERASE};
 	InRowMode Mode;
 	Marble collisionMarble;
+	vector<vector<float>> posInsert;
+
 	int collisionIdx[2];
 	int sameColorIdx[2];
+	int pullCheckIdx;
+	int pullIdx[2];
 
-	vector<vector<float>> posInsert;
 	int insertframe;
 
 	int totalLength;
 	int loopType;
 	int startMarbleNum;
+	int score;
 
 	float radius;
 	float linewidth;
