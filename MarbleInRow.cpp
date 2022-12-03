@@ -18,7 +18,7 @@ void MarbleInRow::setTotalLength() {
 	totalLength = hidedLength;
 	switch (loopType) {
 	case 1: totalLength += (2100 + 2 * radius); break;
-	case 2: break;
+	case 2: totalLength += (920 + PI * 300 * 1.5 + 2 * radius);  break;
 	}
 }
 
@@ -36,12 +36,22 @@ vector<float> MarbleInRow::savedLoopInfo(float length) {
 		else {
 			coord[0] = (-boundaryX + 800) - (length - hidedLength - 1300); coord[1] = -250;  coord[2] = 0;
 		}
-		//else if (length < hidedLength + 2100) {
-		//	coord[0] = (-boundaryX + 800) - (length - hidedLength - 1300); coord[1] = -250;  coord[2] = 0;
-		//}
 		break;
 	case 2:
-		// for stage 2 
+		if (length < hidedLength + 320) {
+			coord[0] = -boundaryX + 700; coord[1] = boundaryY - (length - hidedLength); coord[2] = 0;
+		}
+		else if (length < hidedLength + boundaryY + PI * 300) {
+			float theta = float (length - hidedLength - boundaryY) / 300;
+			coord[0] = -boundaryX + 400 + 300 * cos(theta); coord[1] = - 300 * sin(theta);  coord[2] = 0;
+		}
+		else if (length < hidedLength + boundaryY + PI * 300 * 1.5) {
+			float theta = float(length - hidedLength - boundaryY - PI * 300) / 300;
+			coord[0] = -boundaryX + 400 - 300 * cos(theta); coord[1] = 300 * sin(theta);  coord[2] = 0;
+		}
+		else {
+			coord[0] = (-boundaryX + 400) + (length - hidedLength - boundaryY - PI * 300 * 1.5); coord[1] = 300;  coord[2] = 0;
+		}
 		break;
 	}
 	return coord;
@@ -79,6 +89,7 @@ void MarbleInRow::createLoopMarble() {
 
 void MarbleInRow::draw() const {
 	// draw marbles in row
+	glEnable(GL_LIGHTING);
 	for (int i = 0; i < RowList.size(); i++)
 		RowList[i].draw();
 
@@ -354,7 +365,7 @@ void MarbleInRow::Pull_Erase() {
 }
 
 void MarbleInRow::move() {
-	if (RowList.back().loopPointIdx > totalLength - 3 * radius) {
+	if (RowList.size()!=0 && RowList.back().loopPointIdx > totalLength - 3 * radius) {
 		Mode = InRowMode::GAME_OVER;
 		//cout << "GAME OVER" << endl;
 	}
