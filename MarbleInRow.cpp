@@ -18,7 +18,7 @@ void MarbleInRow::setTotalLength() {
 	totalLength = hidedLength;
 	switch (loopType) {
 	case 1: totalLength += (2100 + 2 * radius); break;
-	case 2: totalLength += (920 + PI * 300 * 1.5 + 2 * radius);  break;
+	case 2: totalLength += (1440 + PI * 300 * 1.5 + 2 * radius);  break;
 	}
 }
 
@@ -49,8 +49,11 @@ vector<float> MarbleInRow::savedLoopInfo(float length) {
 			float theta = float(length - hidedLength - boundaryY - PI * 300) / 300;
 			coord[0] = -boundaryX + 400 - 300 * cos(theta); coord[1] = 300 * sin(theta);  coord[2] = 0;
 		}
-		else {
+		else if (length < hidedLength + boundaryY + PI * 300 * 1.5 + 500) {
 			coord[0] = (-boundaryX + 400) + (length - hidedLength - boundaryY - PI * 300 * 1.5); coord[1] = 300;  coord[2] = 0;
+		}
+		else {
+			coord[0] = (-boundaryX + 900); coord[1] = 300- (length - hidedLength - boundaryY - PI * 300 * 1.5 - 500);  coord[2] = 0;
 		}
 		break;
 	}
