@@ -1,12 +1,11 @@
 #pragma once
-#include <iostream>
+#include "Constants.h"
 #include <queue>
 #include <random>
 #include <cmath>
-#include <GL/glut.h>
 #include "Marble.h"
 #include "Texture.h"
-#include "Constants.h"
+
 
 
 using namespace std;
@@ -42,7 +41,7 @@ public :
 	void rotate();  
 	
 
-
+	float speed;
 	enum { BLOCK, READY, SHOOTED } shoot_mode;  // 0: not ready to shoot, 1: ready to shoot, 2: immediately after pressed 'spacebar'
 	float center[3];
 	float angle;

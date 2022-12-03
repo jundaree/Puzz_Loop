@@ -69,7 +69,7 @@ void Canon::initialize(vector<Material> _marblesMtl) {
 }
 
 Canon::Canon(float _centerX, float _centerY, float _centerZ, float _marble_radius) : 
-	rot_angle(0),angle(0), texture(1, "canon.jpg"), marble_radius(_marble_radius),shoot_mode(READY) {
+	rot_angle(0),angle(0), texture(1, "canon.jpg"), marble_radius(_marble_radius),shoot_mode(READY),speed(10.0f) {
 	center[0] = _centerX;
 	center[1] = _centerY;
 	center[2] = _centerZ;
@@ -87,7 +87,7 @@ void Canon::draw() {
 	
 
 	glPushMatrix();
-
+	glTranslatef(center[0], center[1], center[2]);
 	glRotatef(angle, 0.0f, 0.0f, 1.0f);
 	
 	// Texture
@@ -141,7 +141,8 @@ Marble Canon::shoot() {
 	cout << "shoot!" << endl;
 
 	float r = 2*transfer.getRadius();
-	transfer.setCenter( r* cos(angle * PI / 180), r * sin(angle * PI / 180), 0.0f);
+	transfer.setCenter( center[0]+r* cos(angle * PI / 180), center[1] + r * sin(angle * PI / 180), center[2] + 0.0f);
+	transfer.setVelocity(speed * (transfer.getCenterX()-center[0]) / 2 / transfer.getRadius(), speed * (transfer.getCenterY()-center[1]) / 2 / transfer.getRadius(), 0.0f);
 	return transfer;	
 }
 

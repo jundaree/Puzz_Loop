@@ -1,14 +1,14 @@
 #include "MarbleFly.h"
 
 
-MarbleFly::MarbleFly() : mode(Mode::OFF), reposition_frame(10),insertion_frame(10), speed(10.0f), frame_count(0) {
+MarbleFly::MarbleFly() : mode(Mode::OFF), reposition_frame(10),insertion_frame(10), frame_count(0) {
 
 }
 
 void MarbleFly::setMarble(Marble _marble) {
 	marble = _marble;
 	//speed.x=speed*cos(Angle) = speed * center.x / (2*getRadius())
-	marble.setVelocity(speed * marble.getCenterX() / 2 / marble.getRadius(), speed * marble.getCenterY() / 2 / marble.getRadius(),0.0f);
+	speed = sqrt(marble.getVelocityX() * marble.getVelocityX() + marble.getVelocityY() * marble.getVelocityY());
 	mode = Mode::FLY;
 	reposition_frame = 10;
 	insertion_frame = 10;
@@ -19,7 +19,7 @@ bool MarbleFly::OutofBound() {
 	float y = marble.getCenterY();
 	float r = marble.getRadius();
 
-	if ((x > boundaryX + r) || (x < -boundaryX - r) || (y > boundaryY + r) || (y < -boundaryY - r)) {
+	if ((x > gameboundaryX + r) || (x < -boundaryX - r) || (y > boundaryY + r) || (y < -boundaryY - r)) {
 		mode = Mode::OFF;
 		return true;
 	}

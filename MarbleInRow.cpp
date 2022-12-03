@@ -72,7 +72,7 @@ void MarbleInRow::createLoopMarble() {
 												<< loopPoints.back()[2] << endl;
 
 	// set Marble radius, slice/stack, and initial center
-	srand(unsigned int(time(0))); 
+	 
 	int MTLtypeNum = MTLlist.size();
 	for (int i = 0; i < startMarbleNum; i++) {
 		int mtlType = rand() % MTLtypeNum;

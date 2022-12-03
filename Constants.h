@@ -1,9 +1,11 @@
 #pragma once
 
 #include <iostream>
+#include<string>
 #include <vector>
 #include <time.h>
 #include <GL/glut.h>
+
 
 #define WINDOW_X 100
 #define WINDOW_Y 100
@@ -13,6 +15,8 @@
 
 #define boundaryX (WINDOW_WIDTH)/2
 #define boundaryY (WINDOW_HEIGHT)/2
+
+#define gameboundaryX boundaryX*2/3-50
 
 #define PI 3.1415926
 const float fps = 1000 / 60.0f;
