@@ -63,5 +63,8 @@ public:
 
 	float radius;
 	float linewidth;
+
+	bool make_canon_ready;
+
 };
 

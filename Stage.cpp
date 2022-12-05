@@ -74,8 +74,17 @@ void Stage::initialize() {
 	}
 }
 void Stage::idle() {
-	for (auto& MR : vecMR)
+
+	
+	
+
+	for (auto& MR : vecMR) {
 		MR.move();
+		if (MR.make_canon_ready)
+			canon.ready();
+			
+	}
+
 
 	marblefly.move();
 
@@ -146,7 +155,6 @@ void Stage::MarbleFlyControl() {
 	if (marblefly.isFlying()) {
 		if (!marblefly.OutofBound()) {
 			if (CollisionDetectionWithHandling()) {
-				canon.shoot_mode = canon.READY;
 				marblefly.setMode(MarbleFly::Mode::OFF);
 			}
 		}

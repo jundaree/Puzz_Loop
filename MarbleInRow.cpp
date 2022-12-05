@@ -1,8 +1,8 @@
 #include "MarbleInRow.h"
 
-MarbleInRow::MarbleInRow() : loopType(1), startMarbleNum(20), radius(25), linewidth(10), Mode(InRowMode::PRE_PROGRESS), insertframe(0), pullCheckIdx(0), score(0) {}
+MarbleInRow::MarbleInRow() : loopType(1), startMarbleNum(20), radius(25), linewidth(10), Mode(InRowMode::PRE_PROGRESS), insertframe(0), pullCheckIdx(0), score(0), make_canon_ready(0) {}
 
-MarbleInRow::MarbleInRow(int loopTypeNum, int start, int gamespeed) : radius(25), linewidth(10), Mode(InRowMode::PRE_PROGRESS), insertframe(0), pullCheckIdx(0), score(0) {
+MarbleInRow::MarbleInRow(int loopTypeNum, int start, int gamespeed) : radius(25), linewidth(10), Mode(InRowMode::PRE_PROGRESS), insertframe(0), pullCheckIdx(0), score(0), make_canon_ready(0) {
 	loopType = loopTypeNum;
 	startMarbleNum = start;
 	idx_speed[1] = gamespeed; 
@@ -123,6 +123,7 @@ void MarbleInRow::movePreProgress() {
 	}
 	if (RowList[0].loopPointIdx == 2 * radius * 5) {
 		Mode = InRowMode::OFF;
+		make_canon_ready = 1;
 	}
 }
 
@@ -217,6 +218,7 @@ void MarbleInRow::InsertMarble() {
 	}
 	else {
 		Mode = InRowMode::OFF;
+		make_canon_ready = 1;
 		//cout << "Mode changed to OFF" << endl;
 
 		if (collisionIdx[1] > RowList.size() - 1) {
@@ -272,6 +274,7 @@ void MarbleInRow::EraseCollisionMarble() {
 		pullCheckIdx = sameColorIdx[0] - 1;
 		if (pullCheckIdx == -1 || pullCheckIdx == RowList.size() - 1) {
 			Mode = InRowMode::OFF;
+			make_canon_ready = 1;
 			//cout << "Mode changed to OFF" << endl;
 		}
 			
@@ -308,11 +311,13 @@ void MarbleInRow::checkPullErase() {
 		}
 		else {
 			Mode = InRowMode::OFF;
+			make_canon_ready = 1;
 			//cout << "Mode changed to OFF" << endl;
 		}
 	}
 	else {
 		Mode = InRowMode::OFF;
+		make_canon_ready = 1;
 		//cout << "Mode changed to OFF" << endl;
 	}
 }
@@ -356,6 +361,7 @@ void MarbleInRow::Pull_Erase() {
 			pullCheckIdx = pullIdx[0] - 1;
 			if (pullCheckIdx == -1 || pullCheckIdx == RowList.size() - 1) {
 				Mode = InRowMode::OFF;
+				make_canon_ready = 1;
 				//cout << "Mode changed to OFF" << endl;
 			}
 			else {
@@ -368,6 +374,8 @@ void MarbleInRow::Pull_Erase() {
 }
 
 void MarbleInRow::move() {
+	make_canon_ready = 0;
+
 	if (RowList.size()!=0 && RowList.back().loopPointIdx > totalLength - 3 * radius) {
 		Mode = InRowMode::GAME_OVER;
 		//cout << "GAME OVER" << endl;
@@ -384,4 +392,6 @@ void MarbleInRow::move() {
 		EraseCollisionMarble();
 	else if (Mode == InRowMode::PULL || Mode == InRowMode::PULLERASE)
 		Pull_Erase();
+
+
 }

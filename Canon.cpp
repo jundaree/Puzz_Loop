@@ -69,7 +69,7 @@ void Canon::initialize(vector<Material> _marblesMtl) {
 }
 
 Canon::Canon(float _centerX, float _centerY, float _centerZ, float _marble_radius) : 
-	rot_angle(0),angle(0), texture(1, "canon.jpg"), marble_radius(_marble_radius),shoot_mode(READY),speed(10.0f) {
+	rot_angle(0),angle(0), texture(1, "canon.jpg"), marble_radius(_marble_radius),shoot_mode(BLOCK),speed(10.0f) {
 	center[0] = _centerX;
 	center[1] = _centerY;
 	center[2] = _centerZ;
